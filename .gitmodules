@@ -1,3 +1,6 @@
 [submodule "lib/dsp.js"]
 	path = lib/dsp.js
 	url = http://github.com/corbanbrook/dsp.js.git
+[submodule "lib/underscore"]
+	path = lib/underscore
+	url = http://github.com/documentcloud/underscore.git
