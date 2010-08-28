@@ -1,0 +1,3 @@
+[submodule "lib/dsp.js"]
+	path = lib/dsp.js
+	url = http://github.com/corbanbrook/dsp.js.git
