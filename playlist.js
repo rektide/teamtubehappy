@@ -13,8 +13,11 @@ exports.playlist = function(filename) {
 		for(var l in lines) {
 			var e = parseExp(lines[l])
 			if(e[1].indexOf("File") == 0)
-				event.emit("data",e[2])
+				event.emit("file",e[2])
+			else if(e[1].indexOf("Title") == 0)
+				event.emit("title",e[2])
 		}
+		event.emit("end")
 	})
 	return event
 }
