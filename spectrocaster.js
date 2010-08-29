@@ -1,6 +1,7 @@
 var playlist = require("./playlist"),
 	stream = require("./stream"),
-	dspjs = require("./dsp_wrapper")
+	dspjs = require("./dsp_wrapper"),
+	fft = require("./fft")
 var fs = require("fs"),
 	sys = require("sys")
 
@@ -32,9 +33,12 @@ var streamStarter = function(streamUrl) {
 			return
 		var child = stream.stream(addr)
 		child.title = title
-		child.stdout.on("data",function() {
+		var streamBinder = function() {
+			sys.log("stream binding "+streamUrl+" to location "+addr)
 			streams[streamUrl] = child
-		})
+			child.stdout.removeListener("data",streamBinder)
+		}
+		child.stdout.on("data",streamBinder)
 		var exceptionHandler = function(err) {
 			sys.log("ending stream "+streamUrl+"; "+sys.inspect(arguments))
 			try {
@@ -47,6 +51,8 @@ var streamStarter = function(streamUrl) {
 		child.stderr.on("data", exceptionHandler)
 		child.stderr.on("close", exceptionHandler)
 		child.stderr.on("end", exceptionHandler)
+
+		child.fft = fft.fft(8192, 16, 44100, 441, child.stdout)
 		
 	}
 	addrStream.on("url",attemptConnect)
